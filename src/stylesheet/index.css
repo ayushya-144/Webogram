@@ -1,0 +1,11 @@
+@font-face {
+  font-family: InstagramFonts;
+  src: url(../assets/BillabongFont/Demo_Fonts/Fontspring-DEMO-blue_vinyl_regular_ps_ot.otf);
+}
+#root {
+  min-height: 100vh;
+  min-width: 100vw;
+}
+* {
+  box-sizing: border-box;
+}
