@@ -32,14 +32,13 @@ export default function LogIn() {
   };
 
   async function getLoginUserHandler(data) {
-    if (confirm(JSON.stringify(data))) {
-      const response = await loginUser(data);
-      if (response.error && response.error != undefined) {
-        alert(response.error.status);
-      } else {
-        console.log("data", response.data);
-        navigate("/home");
-      }
+    const response = await loginUser(data);
+    if (response.error && response.error != undefined) {
+      alert(response.error.status);
+    } else {
+      const userData = response.data.data;
+      sessionStorage.setItem("userToken", userData.token);
+      navigate("/home");
     }
   }
 
@@ -91,6 +90,7 @@ export default function LogIn() {
         </div>
         <div className="col-7 text-center mt-4">
           Dont&apos;t have an account?
+          <br />
           <NavLink to="/sign-up">SignUp</NavLink>
         </div>
       </Form>

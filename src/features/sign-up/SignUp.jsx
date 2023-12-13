@@ -36,15 +36,13 @@ export default function SignUp() {
   };
 
   async function getSignUpUserHandler(data) {
-    if (confirm(JSON.stringify(data))) {
-      const response = await loginUser(data);
-      if (response.error && response.error != undefined) {
-        alert(response.error.status);
-        console.log(response);
-      } else {
-        console.log("data", response.data);
-        navigate("/");
-      }
+    const response = await loginUser(data);
+    if (response.error && response.error != undefined) {
+      alert(response.error.status);
+      console.log(response);
+    } else {
+      console.log("data", response.data);
+      navigate("/");
     }
   }
 
