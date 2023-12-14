@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { getUserToken } from "../../utils/getSessionData";
 
 export const homeApi = createApi({
   reducerPath: "home.api",
@@ -22,12 +23,24 @@ export const homeApi = createApi({
         method: "POST",
         body: posts,
         headers: {
-          Authorization: sessionStorage.getItem("userToken"),
+          Authorization: getUserToken(),
         },
       }),
       invalidatesTags: ["Posts"],
     }),
+    searchPosts: builder.query({
+      query: (searchTxt) => ({
+        url: `/posts/get-feed-post?search=${searchTxt}`,
+        headers: {
+          Authorization: getUserToken(),
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetUserPostsQuery, useCreateUserPostsMutation } = homeApi;
+export const {
+  useGetUserPostsQuery,
+  useCreateUserPostsMutation,
+  useSearchPostsQuery,
+} = homeApi;

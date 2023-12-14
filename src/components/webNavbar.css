@@ -1,13 +1,22 @@
 .fa {
-  padding: 1px 2.5px;
+  padding: 5px 5px;
   border-radius: 5px;
   color: black;
   font-size: x-large;
 }
 .fa:hover {
-  color: white;
-  background-color: black;
+  background: linear-gradient(
+    to right,
+    #3051f1,
+    #c92bb7,
+    #f73344,
+    #fa8e37,
+    #fbd377
+  );
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  outline: 2px solid black;
 }
-.fa-plus {
-  border: 2px solid black;
+.fa:active {
+  color: gray;
 }

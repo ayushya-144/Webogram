@@ -1,0 +1,35 @@
+.profile-panel {
+  width: 40rem;
+  background-color: whitesmoke !important;
+  height: 25rem !important;
+  display: flex !important;
+  flex-direction: row !important;
+  box-shadow: inset 0px 0px 8px gray;
+}
+.user-profile > img {
+  height: 35vh !important;
+  width: 35vh !important;
+  object-fit: cover;
+}
+.title-section {
+  display: flex;
+}
+.profile-card-body span {
+  display: block;
+}
+.profile-card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.verified-icon {
+  height: 15px;
+  width: 15px;
+}
+.profile-body-title {
+  font-weight: bolder !important;
+}
+.profile-email {
+  font-style: italic;
+}

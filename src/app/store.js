@@ -1,17 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { loginApi } from "../features/log-in/login";
-import { signupApi } from "../features/sign-up/signUp";
+import { loginSignupApi } from "../features/login-signup/loginSignupApi";
 import { homeApi } from "../features/homepage/home";
+import { profileApi } from "../features/profile/profile";
 
 export const store = configureStore({
   reducer: {
-    [loginApi.reducerPath]: loginApi.reducer,
-    [signupApi.reducerPath]: signupApi.reducer,
+    [loginSignupApi.reducerPath]: loginSignupApi.reducer,
     [homeApi.reducerPath]: homeApi.reducer,
+    [profileApi.reducerPath]: profileApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
-      .concat(loginApi.middleware)
-      .concat(signupApi.middleware)
-      .concat(homeApi.middleware),
+      .concat(loginSignupApi.middleware)
+      .concat(homeApi.middleware)
+      .concat(profileApi.middleware),
 });

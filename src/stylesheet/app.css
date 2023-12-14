@@ -1,5 +1,22 @@
+* {
+  box-sizing: border-box;
+}
 .brand-logo {
   font-family: InstagramFonts;
   font-weight: 0;
   color: #000;
+}
+.brand-logo:hover {
+  cursor: pointer;
+  background: linear-gradient(
+    to right,
+    #3051f1,
+    #c92bb7,
+    #f73344,
+    #fa8e37,
+    #fcdf8f,
+    #fbd377
+  );
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
