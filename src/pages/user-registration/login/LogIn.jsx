@@ -1,4 +1,4 @@
-import { useLoginUserMutation } from "../../../features/login-signUp/loginSignUpApi";
+import { useLoginUserMutation } from "../../../features/login-signup/loginSignupApi";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
@@ -7,7 +7,8 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { NavLink, useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import { errorToaster, successToaster } from "../../../utils/toaster.jsx";
+import { setUserToken } from "../../../utils/getSessionData.js";
 
 const schema = yup.object({
   email: yup
@@ -35,17 +36,19 @@ export default function LogIn() {
   async function getLoginUserHandler(data) {
     const response = await loginUser(data);
     if (response.error && response.error != undefined) {
-      toast.error(response.error.data.message);
+      errorToaster(response.error.data.message);
     } else {
       const userData = response.data.data;
-      sessionStorage.setItem("userToken", userData.token);
-      navigate("/home", { replace: true });
+      setUserToken(userData.token);
+      successToaster(`Welcome ${userData.firstname} ${userData.lastname}`),
+        navigate("/home", {
+          replace: true,
+        });
     }
   }
 
   return (
     <div className="container d-flex justify-content-center align-items-center form-container">
-      <Toaster />
       <Form
         className="login-form flex-column d-flex justify-content-center align-items-center col-5"
         onSubmit={handleSubmit(onSubmit)}

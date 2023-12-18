@@ -6,6 +6,8 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useCreateUserPostsMutation } from "../../features/homepage/home";
+import { errorToaster, successToaster } from "../../utils/toaster";
+import { useNavigate } from "react-router-dom";
 
 const schema = yup.object({
   title: yup.string().required("Title is required"),
@@ -14,6 +16,7 @@ const schema = yup.object({
 
 function ModalPopUp({ show, handleClose }) {
   const [createUserPosts, { isLoading }] = useCreateUserPostsMutation();
+  const navigate = useNavigate();
   const postsForm = useForm({
     resolver: yupResolver(schema),
     mode: "onBlur",
@@ -29,10 +32,12 @@ function ModalPopUp({ show, handleClose }) {
   async function createUserPostsHandler(data) {
     const response = await createUserPosts(data);
     if (response.error && response.error != undefined) {
-      alert(response.error.status);
+      errorToaster(response.error.status);
     } else {
       reset();
       handleClose();
+      successToaster("Post Uploaded Successfully");
+      navigate("/home");
     }
   }
 

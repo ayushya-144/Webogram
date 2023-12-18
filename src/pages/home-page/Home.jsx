@@ -1,39 +1,23 @@
 import { useGetUserPostsQuery } from "../../features/homepage/home";
 import Card from "react-bootstrap/Card";
-import Placeholder from "react-bootstrap/Placeholder";
-import { getUserToken } from "./../../utils/getSessionData";
-import { useLayoutEffect, useState } from "react";
 import ErrorPage from "../error-page/ErrorPage";
+import Loader from "../../components/loader-animation/Loader";
+import { useSearchParams } from "react-router-dom";
+// import { useDeferredValue } from "react";
 
 export default function Home() {
-  const [isUnAuthorized, setIsUnAuthorized] = useState(true);
-  useLayoutEffect(() => {
-    if (getUserToken()) {
-      setIsUnAuthorized(false);
-    }
-  }, []);
-  const { data, error, isLoading } = useGetUserPostsQuery(getUserToken(), {
-    skip: isUnAuthorized,
+  const [searchQuery] = useSearchParams({
+    search: "",
+    isMyPostsOnly: false,
+    isPrivate: false,
   });
+  // const search = searchQuery.get("search");
+  // const deferredSearch = useDeferredValue(search);
+  const { data, error, isLoading } = useGetUserPostsQuery(searchQuery);
   return (
     <div>
       {isLoading ? (
-        <div className="d-flex justify-content-around">
-          <Card style={{ width: "30rem", height: "25rem" }}>
-            <Card.Img variant="top" src="holder.js/100px180" />
-            <Card.Body>
-              <Placeholder as={Card.Title} animation="glow">
-                <Placeholder xs={6} />
-              </Placeholder>
-              <Placeholder as={Card.Text} animation="glow">
-                <Placeholder xs={7} /> <Placeholder xs={4} />
-                <Placeholder xs={4} /> <Placeholder xs={6} />
-                <Placeholder xs={8} />
-              </Placeholder>
-              <Placeholder.Button variant="primary" xs={6} />
-            </Card.Body>
-          </Card>
-        </div>
+        <Loader />
       ) : error ? (
         <ErrorPage>{error.data.message}</ErrorPage>
       ) : (

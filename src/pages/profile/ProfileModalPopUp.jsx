@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useUpdateUserPostsMutation } from "../../features/profile/profile";
 import { useEffect } from "react";
+import { errorToaster, successToaster } from "../../utils/toaster";
 
 const schema = yup.object({
   firstname: yup.string().required("Firstname is required"),
@@ -33,10 +34,12 @@ export default function ProfileModalPopUp({ show, handleClose, data }) {
   async function createUserPostsHandler(formData) {
     const response = await updateUserPosts(formData);
     if (response.error && response.error != undefined) {
-      alert(response.error.status);
+      console.log(response.error);
+      errorToaster(response.error.status);
     } else {
       reset();
       handleClose();
+      successToaster("Profile Updated successfully");
     }
   }
   return (

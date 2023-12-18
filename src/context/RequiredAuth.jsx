@@ -9,7 +9,7 @@ export const RequiredAuth = ({ children }) => {
     if (loggedInUser === undefined || loggedInUser === null) {
       return navigate("/");
     }
-  });
+  }, [loggedInUser, navigate]);
   return <>{children}</>;
 };
 
@@ -17,7 +17,11 @@ export const ValidateAuth = ({ children }) => {
   const navigate = useNavigate();
   const loggedInUser = getUserToken();
   useEffect(() => {
-    if (loggedInUser !== undefined && loggedInUser !== null) {
+    if (
+      loggedInUser !== undefined &&
+      loggedInUser !== null &&
+      loggedInUser !== ""
+    ) {
       navigate("/home");
     }
   }, [loggedInUser, navigate]);

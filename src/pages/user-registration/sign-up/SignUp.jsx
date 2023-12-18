@@ -1,4 +1,3 @@
-import { useSignUpUserMutation } from "../../../features/login-signUp/loginSignUpApi";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
@@ -8,6 +7,8 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Col, Row } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
+import { errorToaster, successToaster } from "../../../utils/toaster.jsx";
+import { useSignUpUserMutation } from "../../../features/login-signup/loginSignupApi.js";
 
 const schema = yup.object({
   firstname: yup.string().required("Enter your first name"),
@@ -38,11 +39,13 @@ export default function SignUp() {
   async function getSignUpUserHandler(data) {
     const response = await signUpUser(data);
     if (response.error && response.error != undefined) {
-      alert(response.error.status);
-      console.log(response);
+      errorToaster(response.error.data.message);
     } else {
       console.log("data", response.data);
       navigate("/");
+      successToaster(
+        "You profile has been created successfully! Login to continue"
+      );
     }
   }
 

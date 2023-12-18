@@ -1,19 +1,18 @@
 import { useGetUserProfileQuery } from "../../features/profile/profile";
 import Card from "react-bootstrap/Card";
 import "./profile.css";
-// import randomQuotes from "random-quotes";
 import ProfileModalPopUp from "./ProfileModalPopUp";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import Loader from "../../components/loader-animation/Loader";
 
 export default function Profile() {
   const { data, isLoading } = useGetUserProfileQuery();
-  // const quote = useRef(randomQuotes());
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return isLoading ? (
-    "Loading..."
+    <Loader />
   ) : (
     <div className="container-fluid profile-container d-flex justify-content-center align-items-center mt-5">
       <ProfileModalPopUp
@@ -24,7 +23,7 @@ export default function Profile() {
       <Card className="profile-panel">
         <Card.Body className="profile-card-body">
           <span className="user-profile">
-            <img src="/public/user-icon-on-transparent-background-free-png.webp" />
+            <img src="/user-icon-on-transparent-background-free-png.webp" />
           </span>
         </Card.Body>
         <Card.Body className="profile-card-body justify-content-start mt-5 align-items-start">
@@ -34,10 +33,7 @@ export default function Profile() {
                 <span className="text-info d-flex align-items-center">
                   {data.data?.username}
                   {data.data?.isVerified && (
-                    <img
-                      className="verified-icon mx-1"
-                      src="/public/verifed.png"
-                    />
+                    <img className="verified-icon mx-1" src="/verifed.png" />
                   )}
                   <button className="btn" onClick={handleShow}>
                     Edit
@@ -63,8 +59,9 @@ export default function Profile() {
                 <code> public</code>
               )}
             </span>
-            <span className="text mt-3">
-              {/* <code>Bio</code> : {quote.current.body} */}
+            <span className="text mt-3 text-left">
+              <code>Bio</code> : The magic you are looking for is in the work
+              that you&apos;re avoiding!
             </span>
           </Card.Text>
         </Card.Body>
