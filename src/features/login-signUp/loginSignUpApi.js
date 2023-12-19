@@ -5,6 +5,7 @@ export const loginSignupApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:4004/api/v1",
   }),
+
   endpoints: (builder) => ({
     loginUser: builder.mutation({
       query: (user) => ({

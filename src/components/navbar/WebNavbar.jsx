@@ -10,10 +10,15 @@ import AlertPopUp from "../AlertPopUp/AlertPopUp.jsx";
 import { successToaster } from "../../utils/toaster.jsx";
 import ModalPopUp from "../../pages/create-post-pop-up/ModalPopUp.jsx";
 import { useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { profileApi } from "../../features/profile/profile.js";
+import { homeApi } from "../../features/homepage/home.js";
+import { loginSignupApi } from "../../features/login-signUp/loginSignUpApi.js";
 
 export default function WebNavbar() {
   const location = useLocation();
   const [showSearch, setShowSearch] = useState(false);
+
   useEffect(() => {
     if (location.pathname === "/profile") {
       setShowSearch(false);
@@ -27,17 +32,32 @@ export default function WebNavbar() {
     isMyPostsOnly: false,
     isPrivate: false,
   });
-  const search = searchQuery.get("search");
+
+  const search =
+    searchQuery.get("search") !== ""
+      ? searchQuery.get("search")
+      : searchQuery.delete("search");
+  const isMyPostsOnly =
+    searchQuery.get("isMyPostsOnly") === "true"
+      ? true
+      : searchQuery.delete("isMyPostsOnly");
+  const isPrivate =
+    searchQuery.get("isPrivate") === "true"
+      ? true
+      : searchQuery.delete("isPrivate");
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const [showCreatePopUp, setShowCreatePopUp] = useState(false);
-
   const handleCloseCreatePopUp = () => setShowCreatePopUp(false);
   const handleShowCreatePopUp = () => setShowCreatePopUp(true);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleUserLogOut = () => {
+    dispatch(homeApi.util.resetApiState());
+    dispatch(profileApi.util.resetApiState());
+    dispatch(loginSignupApi.util.resetApiState());
     expireUserToken();
     navigate("/", { replace: true });
     successToaster("You have been Logged Out");
@@ -45,8 +65,13 @@ export default function WebNavbar() {
   const handleSearchText = (e) => {
     setSearchQuery(
       (prev) => {
-        prev.set("search", e.target.value);
-        return prev;
+        if (e.target.value !== "") {
+          prev.set("search", e.target.value);
+          return prev;
+        } else {
+          prev.delete("search");
+          return prev;
+        }
       },
       {
         replace: true,
@@ -79,27 +104,62 @@ export default function WebNavbar() {
           >
             {showSearch && (
               <>
-                <Form className="d-flex mx-auto">
+                <Form className="mx-5">
                   <Form.Control
                     type="search"
                     placeholder="Search"
-                    className="me-2"
+                    className="me-2 rounded"
                     aria-label="Search"
                     onChange={(e) => handleSearchText(e)}
-                    value={search}
+                    value={search ? search : ""}
                   />
                 </Form>
-                <div className="btn-group-toggle" data-toggle="buttons">
-                  <label className="btn btn-secondary active">
+                <div className="btn-group-toggle mx-1" data-toggle="buttons">
+                  <label className={isPrivate ? "btn active" : "btn fa"}>
                     <input
                       className="d-none"
                       type="checkbox"
+                      value={isPrivate ? true : false}
+                      checked={isPrivate ? true : false}
                       autoComplete="off"
-                      onClick={(e) => {
+                      onChange={(e) => {
                         setSearchQuery(
                           (prev) => {
-                            prev.set("isMyPostsOnly", e.target.checked);
-                            return prev;
+                            if (e.target.checked) {
+                              prev.set("isPrivate", true);
+                              return prev;
+                            } else {
+                              prev.delete("isPrivate");
+                              return prev;
+                            }
+                          },
+                          {
+                            replace: true,
+                          }
+                        );
+                      }}
+                    />
+                    Private Posts
+                  </label>
+                </div>
+                <div className="btn-group-toggle" data-toggle="buttons">
+                  <label className={isMyPostsOnly ? "btn active" : "btn fa"}>
+                    <input
+                      className="d-none"
+                      type="checkbox"
+                      value={isMyPostsOnly ? true : false}
+                      checked={isMyPostsOnly ? true : false}
+                      autoComplete="off"
+                      onChange={(e) => {
+                        setSearchQuery(
+                          (prev) => {
+                            if (e.target.checked) {
+                              prev.set("isMyPostsOnly", true);
+                              return prev;
+                            } else {
+                              prev.delete("isMyPostsOnly");
+                              return prev;
+                            }
                           },
                           {
                             replace: true,
@@ -115,6 +175,10 @@ export default function WebNavbar() {
             <Nav className="me-1">
               <NavLink
                 className="fa fa-home text-decoration-none text-center mx-2 d-flex mt-2 h-50"
+                to="/home"
+              ></NavLink>
+              <NavLink
+                className="fa fa-heart-o text-decoration-none text-center mx-2 d-flex mt-2 h-50"
                 to="/home"
               ></NavLink>
               <Nav.Link className="text-decoration-none text-center">

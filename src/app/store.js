@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { loginSignupApi } from "../features/login-signup/loginSignupApi";
+import { loginSignupApi } from "../features/login-signUp/loginSignUpApi";
 import { homeApi } from "../features/homepage/home";
 import { profileApi } from "../features/profile/profile";
 

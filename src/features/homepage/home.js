@@ -11,26 +11,37 @@ export const homeApi = createApi({
     },
   }),
 
-  // tagTypes: ["Posts"],
+  tagTypes: ["Posts"],
   endpoints: (builder) => ({
     getUserPosts: builder.query({
-      query: ({ searchTxt, isMyPostsOnly, isPrivate }) => ({
+      query: ({ ...filter }) => ({
         url: "/posts/get-feed-post",
         params: {
-          search: searchTxt,
-          isMyPostsOnly: isMyPostsOnly,
-          isPrivate: isPrivate,
+          search: filter.search,
+          isMyPostsOnly: filter.isMyPostsOnly,
+          isPrivate: filter.isPrivate,
         },
       }),
+      providesTags: ["Posts"],
     }),
     createUserPosts: builder.mutation({
       query: (posts) => ({
         url: "/posts/create-post",
         method: "POST",
-        body: posts,
+        body: posts.data,
       }),
       onQueryStarted({ ...args }, { dispatch, queryFulfilled }) {
-        updateQueryData(homeApi, "getUserPosts", "", dispatch, queryFulfilled);
+        updateQueryData(
+          homeApi,
+          "getUserPosts",
+          {
+            search: args.search,
+            isMyPostsOnly: args.isMyPostsOnly,
+            isPrivate: args.isPrivate,
+          },
+          dispatch,
+          queryFulfilled
+        );
       },
     }),
     searchPosts: builder.query({

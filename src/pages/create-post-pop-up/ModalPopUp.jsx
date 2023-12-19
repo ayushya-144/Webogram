@@ -7,7 +7,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useCreateUserPostsMutation } from "../../features/homepage/home";
 import { errorToaster, successToaster } from "../../utils/toaster";
-import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const schema = yup.object({
   title: yup.string().required("Title is required"),
@@ -16,7 +17,7 @@ const schema = yup.object({
 
 function ModalPopUp({ show, handleClose }) {
   const [createUserPosts, { isLoading }] = useCreateUserPostsMutation();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const postsForm = useForm({
     resolver: yupResolver(schema),
     mode: "onBlur",
@@ -29,15 +30,29 @@ function ModalPopUp({ show, handleClose }) {
     createUserPostsHandler(data);
   };
 
+  const [searchQuery] = useSearchParams({
+    search: "",
+    isMyPostsOnly: false,
+    isPrivate: false,
+  });
+  const search = searchQuery.get("search");
+  const isMyPostsOnly = searchQuery.get("isMyPostsOnly") === "true" ? true : "";
+  const isPrivate = searchQuery.get("isPrivate") === "true" ? true : "";
+  // console.log(search, isMyPostsOnly, isPrivate);
   async function createUserPostsHandler(data) {
-    const response = await createUserPosts(data);
+    const response = await createUserPosts({
+      search,
+      isMyPostsOnly,
+      isPrivate,
+      data,
+    });
     if (response.error && response.error != undefined) {
       errorToaster(response.error.status);
     } else {
       reset();
       handleClose();
       successToaster("Post Uploaded Successfully");
-      navigate("/home");
+      // navigate("/home");
     }
   }
 

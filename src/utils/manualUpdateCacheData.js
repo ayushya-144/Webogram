@@ -9,6 +9,12 @@ export async function updateQueryData(
 ) {
   try {
     const { data: create } = await queryFulfilled;
+    if (create.data.title.includes(searchQuery.search) === false) {
+      searchQuery.search = "";
+    }
+    if (create.data.isPrivate) {
+      searchQuery.isPrivate = true;
+    }
     dispatch(
       api.util.updateQueryData(Query, searchQuery, (draft) => {
         draft.data.unshift(create.data);
