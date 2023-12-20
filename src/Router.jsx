@@ -11,6 +11,7 @@ import { RequiredAuth, ValidateAuth } from "./context/RequiredAuth.jsx";
 import Profile from "./pages/profile/profile.jsx";
 import { Toaster } from "react-hot-toast";
 import { createContext } from "react";
+import Activity from "./pages/profile/activity/Activity.jsx";
 
 export const SearchContext = createContext(null);
 export default function Router() {
@@ -50,6 +51,14 @@ export default function Router() {
           element={
             <RequiredAuth>
               <Profile />
+            </RequiredAuth>
+          }
+        />
+        <Route
+          path="/activity"
+          element={
+            <RequiredAuth>
+              <Activity />
             </RequiredAuth>
           }
         />

@@ -1,25 +1,35 @@
 import { errorToaster } from "./toaster";
 
 export async function updateQueryData(
+  getState,
   api,
-  Query,
-  searchQuery,
+  methodName,
   dispatch,
   queryFulfilled
 ) {
   try {
+    console.log(api);
+    console.log(getState());
+    const apiState = getState();
+    const state = apiState["home.api"];
     const { data: create } = await queryFulfilled;
-    if (create.data.title.includes(searchQuery.search) === false) {
-      searchQuery.search = "";
+    let query;
+    for (const key in state.queries) {
+      console.log(key);
+      query = state.queries[key].originalArgs;
+      console.log(query);
+      dispatch(
+        api.util.updateQueryData(methodName, query, (draft) => {
+          console.log(Boolean(query.isPrivate), create.data);
+          if (create.data.title.includes(query.search)) {
+            if (Boolean(query.isPrivate) == create.data.isPrivate) {
+              draft.data.unshift(create.data);
+              draft.total++;
+            }
+          }
+        })
+      );
     }
-    if (create.data.isPrivate) {
-      searchQuery.isPrivate = true;
-    }
-    dispatch(
-      api.util.updateQueryData(Query, searchQuery, (draft) => {
-        draft.data.unshift(create.data);
-      })
-    );
   } catch (error) {
     errorToaster(error);
   }

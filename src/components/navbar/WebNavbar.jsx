@@ -26,7 +26,6 @@ export default function WebNavbar() {
       setShowSearch(true);
     }
   }, [location]);
-  const [show, setShow] = useState(false);
   const [searchQuery, setSearchQuery] = useSearchParams({
     search: "",
     isMyPostsOnly: false,
@@ -45,6 +44,7 @@ export default function WebNavbar() {
     searchQuery.get("isPrivate") === "true"
       ? true
       : searchQuery.delete("isPrivate");
+  const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -179,7 +179,7 @@ export default function WebNavbar() {
               ></NavLink>
               <NavLink
                 className="fa fa-heart-o text-decoration-none text-center mx-2 d-flex mt-2 h-50"
-                to="/home"
+                to="/activity"
               ></NavLink>
               <Nav.Link className="text-decoration-none text-center">
                 <i onClick={handleShowCreatePopUp} className="fa fa-plus"></i>

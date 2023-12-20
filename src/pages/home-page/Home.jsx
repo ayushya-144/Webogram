@@ -13,8 +13,9 @@ export default function Home() {
   });
   const search =
     searchQuery.get("search") !== "" ? searchQuery.get("search") : "";
-  const isMyPostsOnly = searchQuery.get("isMyPostsOnly") === "true" ? true : "";
-  const isPrivate = searchQuery.get("isPrivate") === "true" ? true : "";
+  const isMyPostsOnly =
+    searchQuery.get("isMyPostsOnly") === "true" ? "true" : "";
+  const isPrivate = searchQuery.get("isPrivate") === "true" ? "true" : "";
   // const deferredSearch = useDeferredValue(search);
   const { data, error, isLoading } = useGetUserPostsQuery({
     search,

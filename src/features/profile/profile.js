@@ -5,7 +5,7 @@ import { errorToaster } from "./../../utils/toaster";
 export const profileApi = createApi({
   reducerPath: "profile.api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:4004/api/v1",
+    baseUrl: "http://localhost:4004/api/v1/users",
     prepareHeaders: (headers) => {
       headers.set("Authorization", getUserToken());
     },
@@ -14,13 +14,13 @@ export const profileApi = createApi({
   endpoints: (builder) => ({
     getUserProfile: builder.query({
       query: () => ({
-        url: "/users/get-user-profile",
+        url: "/get-user-profile",
       }),
       providesTags: ["Profile"],
     }),
     updateUserPosts: builder.mutation({
       query: ({ ...rest }) => ({
-        url: "/users/update-user-profile",
+        url: "/update-user-profile",
         method: "PATCH",
         body: rest,
       }),
@@ -41,16 +41,33 @@ export const profileApi = createApi({
         }
       },
     }),
-    // searchPosts: builder.query({
-    //   query: (searchTxt) => ({
-    //     url: `/posts/get-feed-post?search=${searchTxt}`,
-    //     headers: {
-    //       Authorization: sessionStorage.getItem("userToken"),
-    //     },
-    //   }),
-    // }),
+    getAllUsers: builder.query({
+      query: () => ({
+        url: "/get-all-users",
+      }),
+      providesTags: ["Profile"],
+    }),
+    getFollowRequests: builder.query({
+      query: () => ({
+        url: "/get-follow-requests",
+      }),
+      providesTags: ["Profile"],
+    }),
+    followUser: builder.mutation({
+      query: (id) => ({
+        url: "/follow-user",
+        method: "POST",
+        body: id,
+      }),
+      invalidatesTags: ["Profile"],
+    }),
   }),
 });
 
-export const { useGetUserProfileQuery, useUpdateUserPostsMutation } =
-  profileApi;
+export const {
+  useGetUserProfileQuery,
+  useUpdateUserPostsMutation,
+  useGetAllUsersQuery,
+  useGetFollowRequestsQuery,
+  useFollowUserMutation,
+} = profileApi;

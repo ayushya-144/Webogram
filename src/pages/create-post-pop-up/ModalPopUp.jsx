@@ -7,7 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useCreateUserPostsMutation } from "../../features/homepage/home";
 import { errorToaster, successToaster } from "../../utils/toaster";
-import { useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
 
 const schema = yup.object({
@@ -26,26 +26,19 @@ function ModalPopUp({ show, handleClose }) {
   const { register, handleSubmit, formState, reset } = postsForm;
   const { errors } = formState;
 
+  useEffect(() => {
+    if (show) {
+      reset();
+    }
+  }, [show, reset]);
+
   const onSubmit = (data) => {
     createUserPostsHandler(data);
   };
 
-  const [searchQuery] = useSearchParams({
-    search: "",
-    isMyPostsOnly: false,
-    isPrivate: false,
-  });
-  const search = searchQuery.get("search");
-  const isMyPostsOnly = searchQuery.get("isMyPostsOnly") === "true" ? true : "";
-  const isPrivate = searchQuery.get("isPrivate") === "true" ? true : "";
   // console.log(search, isMyPostsOnly, isPrivate);
   async function createUserPostsHandler(data) {
-    const response = await createUserPosts({
-      search,
-      isMyPostsOnly,
-      isPrivate,
-      data,
-    });
+    const response = await createUserPosts(data);
     if (response.error && response.error != undefined) {
       errorToaster(response.error.status);
     } else {
