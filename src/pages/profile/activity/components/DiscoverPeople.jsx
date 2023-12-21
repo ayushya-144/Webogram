@@ -4,28 +4,66 @@ import ErrorPage from "../../../error-page/ErrorPage";
 import {
   useFollowUserMutation,
   useGetAllUsersQuery,
+  useGetUserProfileQuery,
 } from "../../../../features/profile/profile";
 
 function DiscoverPeople() {
-  const { data, error, isLoading } = useGetAllUsersQuery();
+  const {
+    data: profileUserData,
+    // error: profileUserError,
+    isLoading: profileUserLoading,
+  } = useGetUserProfileQuery();
+  const {
+    data: allUsersData,
+    error: allUsersError,
+    isLoading: allUsersLoading,
+  } = useGetAllUsersQuery();
   const [followUser] = useFollowUserMutation();
-
-  async function handleFollowUser(userId) {
+  // console.log(data);
+  async function handleFollowUser(id) {
     if (confirm("You want to follow this user")) {
-      const userData = await followUser({ userId });
-      console.log(userId, userData);
+      const response = await followUser({ id });
+      console.log({ id }, response);
     }
   }
+  // if (!allUsersLoading && !profileUserLoading) {
+  //   for (let i = 0; i < allUsersData.data.length; i++) {
+  //     for (let j = 0; j < profileUserData.data.following.length; j++) {
+  //       if (profileUserData.data.following[j].followingId) {
+  //         if (
+  //           profileUserData.data.following[j].followingId !==
+  //           allUsersData.data[i]._id
+  //         ) {
+  //           filteredData.push(allUsersData.data[i]);
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+
+  if (!allUsersLoading && !profileUserLoading) {
+    var filteredData = allUsersData.data.map((user) => {
+      for (let i = 0; i < profileUserData.data.following.length; i++) {
+        if (profileUserData.data.following[i].followingId) {
+          if (profileUserData.data.following[i].followingId !== user._id) {
+            return user;
+          }
+        }
+      }
+    });
+  }
+
+  console.log(filteredData);
 
   return (
     <div className="mx-2 mb-3">
       <h5>Discover People</h5>
-      {isLoading ? (
+      {allUsersLoading ? (
         <Loader />
-      ) : error ? (
-        <ErrorPage>{error.data.message}</ErrorPage>
-      ) : data?.data?.length > 0 ? (
-        data?.data?.map((user) => {
+      ) : allUsersError ? (
+        <ErrorPage>{allUsersError.data.message}</ErrorPage>
+      ) : allUsersData?.data?.length > 0 ? (
+        allUsersData?.data?.map((user) => {
           return (
             <div key={user._id} className="d-flex justify-content-around mt-2">
               <Card className="activity-panel">

@@ -1,4 +1,4 @@
-import { useLoginUserMutation } from "../../../features/login-signup/loginSignupApi";
+import { useLoginUserMutation } from "../../../features/login-signUp/loginSignUpApi";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
@@ -55,7 +55,13 @@ export default function LogIn() {
       >
         <h1 className="brand-logo text-center">Webogram</h1>
         <Form.Group className="login-form-group">
-          <FloatingLabel label="Email address">
+          <FloatingLabel
+            label={
+              <>
+                Email Address <sup className="text-danger">*</sup>
+              </>
+            }
+          >
             <Form.Control
               type="text"
               name="email"
@@ -67,7 +73,13 @@ export default function LogIn() {
         </Form.Group>
         <Form.Text className="text-danger">{errors.email?.message}</Form.Text>
         <Form.Group className="login-form-group">
-          <FloatingLabel label="Password">
+          <FloatingLabel
+            label={
+              <>
+                Password <sup className="text-danger">*</sup>
+              </>
+            }
+          >
             <Form.Control
               type="password"
               name="password"

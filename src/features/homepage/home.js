@@ -26,14 +26,29 @@ export const homeApi = createApi({
         method: "POST",
         body: post,
       }),
-      onQueryStarted({ ...args }, { dispatch, queryFulfilled, getState }) {
-        updateQueryData(
-          getState,
-          homeApi,
-          "getUserPosts",
-          dispatch,
-          queryFulfilled
-        );
+      async onQueryStarted(
+        { ...args },
+        { dispatch, queryFulfilled, getState }
+      ) {
+        const apiState = getState();
+        const state = apiState["home.api"];
+
+        const { data: create } = await queryFulfilled;
+        for (const key in state.queries) {
+          let query;
+          query = state.queries[key].originalArgs;
+          const cb = (draft) => {
+            if (create.data.title.includes(query.search)) {
+              for (const subKey in query) {
+                if (Boolean(query[subKey]) == create.data[subKey]) {
+                  draft.data.unshift(create.data);
+                  draft.total++;
+                }
+              }
+            }
+          };
+          updateQueryData(homeApi, "getUserPosts", dispatch, query, cb);
+        }
       },
     }),
     searchPosts: builder.query({

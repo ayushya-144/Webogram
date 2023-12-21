@@ -26,6 +26,7 @@ export default function WebNavbar() {
       setShowSearch(true);
     }
   }, [location]);
+
   const [searchQuery, setSearchQuery] = useSearchParams({
     search: "",
     isMyPostsOnly: false,

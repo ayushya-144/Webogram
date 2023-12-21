@@ -54,10 +54,18 @@ export const profileApi = createApi({
       providesTags: ["Profile"],
     }),
     followUser: builder.mutation({
-      query: (id) => ({
+      query: (data) => ({
         url: "/follow-user",
         method: "POST",
-        body: id,
+        body: data,
+      }),
+      invalidatesTags: ["Profile"],
+    }),
+    acceptFollowRequest: builder.mutation({
+      query: (data) => ({
+        url: "/accept-follow-requests",
+        method: "POST",
+        body: data,
       }),
       invalidatesTags: ["Profile"],
     }),
@@ -70,4 +78,5 @@ export const {
   useGetAllUsersQuery,
   useGetFollowRequestsQuery,
   useFollowUserMutation,
+  useAcceptFollowRequestMutation,
 } = profileApi;

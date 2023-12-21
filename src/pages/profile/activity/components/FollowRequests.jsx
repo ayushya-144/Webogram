@@ -1,20 +1,53 @@
 import Card from "react-bootstrap/Card";
 import Loader from "../../../../components/loader-animation/Loader";
 import ErrorPage from "../../../error-page/ErrorPage";
-import { useGetFollowRequestsQuery } from "../../../../features/profile/profile";
+import {
+  useGetAllUsersQuery,
+  useGetFollowRequestsQuery,
+  useAcceptFollowRequestMutation,
+} from "../../../../features/profile/profile";
 
 function FollowRequests() {
-  const { data, error, isLoading } = useGetFollowRequestsQuery();
-  console.log(data);
+  const {
+    data: usersData,
+    error: usersDataError,
+    isLoading: usersIsLoading,
+  } = useGetAllUsersQuery();
+
+  const { data: followRequestsData } = useGetFollowRequestsQuery();
+
+  const [acceptFollowRequest] = useAcceptFollowRequestMutation();
+
+  // console.log(usersData);
+  // console.log(followRequestsData);
+
+  let filteredData = [];
+  if (followRequestsData && usersData) {
+    for (let i = 0; i < usersData.data.length; i++) {
+      for (let j = 0; j < followRequestsData.data.length; j++) {
+        if (followRequestsData.data[j].followerId === usersData.data[i]._id) {
+          filteredData.push(usersData.data[i]);
+        }
+      }
+    }
+  }
+
+  async function handleAcceptFollowRequest(id) {
+    const response = await acceptFollowRequest({ id });
+    console.log(response);
+  }
+
+  // console.log(filteredData);
+
   return (
     <div className="mb-3">
       <h5>Follow Requests</h5>
-      {isLoading ? (
+      {usersIsLoading ? (
         <Loader />
-      ) : error ? (
-        <ErrorPage>{error.data.message}</ErrorPage>
-      ) : data?.data?.length > 0 ? (
-        data?.data?.map((user) => {
+      ) : usersDataError ? (
+        <ErrorPage>{usersDataError.data.message}</ErrorPage>
+      ) : followRequestsData?.data?.length > 0 ? (
+        filteredData?.map((user) => {
           return (
             <div key={user._id} className="d-flex justify-content-around mt-2">
               <Card className="activity-panel">
@@ -33,6 +66,12 @@ function FollowRequests() {
                             className="verified-icon mx-1"
                             src="/verifed.png"
                           />
+                          <button
+                            className="btn"
+                            onClick={() => handleAcceptFollowRequest(user._id)}
+                          >
+                            Accept
+                          </button>
                         </span>
                       </span>
                     </span>
@@ -47,7 +86,7 @@ function FollowRequests() {
                         <code> public</code>
                       )}
                     </span>
-                    <span className="text mt-3 text-left">
+                    <span className="text mt-1 text-left">
                       <code>Bio</code> : The magic you are looking for is in the
                       work that you&apos;re avoiding!
                     </span>

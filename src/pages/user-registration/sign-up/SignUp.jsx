@@ -8,7 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Col, Row } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
 import { errorToaster, successToaster } from "../../../utils/toaster.jsx";
-import { useSignUpUserMutation } from "../../../features/login-signup/loginSignupApi.js";
+import { useSignUpUserMutation } from "../../../features/login-signUp/loginSignUpApi.js";
 
 const schema = yup.object({
   firstname: yup.string().required("Enter your first name"),
@@ -61,7 +61,13 @@ export default function SignUp() {
         </span>
         <Row className="mb-1">
           <Form.Group as={Col} className="login-form-group">
-            <FloatingLabel label="First Name">
+            <FloatingLabel
+              label={
+                <>
+                  First Name <sup className="text-danger">*</sup>
+                </>
+              }
+            >
               <Form.Control
                 type="text"
                 name="firstname"
@@ -75,7 +81,13 @@ export default function SignUp() {
             </Form.Text>
           </Form.Group>
           <Form.Group as={Col} className="login-form-group">
-            <FloatingLabel label="Last Name">
+            <FloatingLabel
+              label={
+                <>
+                  Last Name <sup className="text-danger">*</sup>
+                </>
+              }
+            >
               <Form.Control
                 type="text"
                 name="lastname"
@@ -89,7 +101,13 @@ export default function SignUp() {
             </Form.Text>
           </Form.Group>
           <Form.Group as={Col} className="login-form-group">
-            <FloatingLabel label="Username">
+            <FloatingLabel
+              label={
+                <>
+                  Username <sup className="text-danger">*</sup>
+                </>
+              }
+            >
               <Form.Control
                 type="text"
                 name="username"
@@ -104,7 +122,13 @@ export default function SignUp() {
           </Form.Group>
         </Row>
         <Form.Group className="login-form-group">
-          <FloatingLabel label="Email address">
+          <FloatingLabel
+            label={
+              <>
+                Email Address <sup className="text-danger">*</sup>
+              </>
+            }
+          >
             <Form.Control
               type="text"
               name="email"
@@ -116,7 +140,13 @@ export default function SignUp() {
         </Form.Group>
         <Form.Text className="text-danger">{errors.email?.message}</Form.Text>
         <Form.Group className="login-form-group">
-          <FloatingLabel label="Password">
+          <FloatingLabel
+            label={
+              <>
+                Password <sup className="text-danger">*</sup>
+              </>
+            }
+          >
             <Form.Control
               type="password"
               name="password"

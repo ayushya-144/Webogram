@@ -3,7 +3,6 @@ import Card from "react-bootstrap/Card";
 import ErrorPage from "../error-page/ErrorPage";
 import Loader from "../../components/loader-animation/Loader";
 import { useSearchParams } from "react-router-dom";
-// import { useDeferredValue } from "react";
 
 export default function Home() {
   const [searchQuery] = useSearchParams({
@@ -16,7 +15,6 @@ export default function Home() {
   const isMyPostsOnly =
     searchQuery.get("isMyPostsOnly") === "true" ? "true" : "";
   const isPrivate = searchQuery.get("isPrivate") === "true" ? "true" : "";
-  // const deferredSearch = useDeferredValue(search);
   const { data, error, isLoading } = useGetUserPostsQuery({
     search,
     isMyPostsOnly,

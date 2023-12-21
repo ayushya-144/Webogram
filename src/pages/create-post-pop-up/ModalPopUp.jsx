@@ -58,7 +58,14 @@ function ModalPopUp({ show, handleClose }) {
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Modal.Body>
             <Form.Group className="mb-3">
-              <FloatingLabel label="Title" className="mb-3">
+              <FloatingLabel
+                label={
+                  <>
+                    Title <sup className="text-danger">*</sup>
+                  </>
+                }
+                className="mb-3"
+              >
                 <Form.Control
                   placeholder="Title"
                   type="text"
@@ -71,7 +78,14 @@ function ModalPopUp({ show, handleClose }) {
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3">
-              <FloatingLabel label="Description" className="mb-3">
+              <FloatingLabel
+                label={
+                  <>
+                    Description <sup className="text-danger">*</sup>
+                  </>
+                }
+                className="mb-3"
+              >
                 <Form.Control
                   placeholder="Description"
                   type="text"
