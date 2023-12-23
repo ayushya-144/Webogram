@@ -11,6 +11,11 @@ export default function Profile() {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const handleFollowingFollowers = (request, data) => {
+    console.log(request, data);
+  };
+
   return isLoading ? (
     <Loader />
   ) : (
@@ -40,13 +45,25 @@ export default function Profile() {
                   </button>
                 </span>
               </span>
-              <span className="mt-2">
-                {data.data?.totalFollower} followers {data.data?.totalFollowing}{" "}
-                following
-              </span>
+              <button
+                className="btn border shadow mt-1"
+                onClick={() =>
+                  handleFollowingFollowers("Following", data?.data?.following)
+                }
+              >
+                {data.data?.totalFollowing} following
+              </button>{" "}
+              <button
+                className="btn border shadow mt-1"
+                onClick={() =>
+                  handleFollowingFollowers("Followers", data?.data?.follower)
+                }
+              >
+                {data.data?.totalFollower} followers
+              </button>
             </span>
           </Card.Title>
-          <Card.Text className="mt-4">
+          <Card.Text className="mt-3">
             <span className="profile-body-title">
               {data.data?.firstname + " " + data.data?.lastname}
             </span>

@@ -8,10 +8,11 @@ import WebNavbar from "./components/navbar/WebNavbar.jsx";
 import ShowNavbar from "./components/navbar/ShowNavbar.jsx";
 import ErrorPage from "./pages/error-page/ErrorPage";
 import { RequiredAuth, ValidateAuth } from "./context/RequiredAuth.jsx";
-import Profile from "./pages/profile/profile.jsx";
+import Profile from "./pages/profile/Profile.jsx";
 import { Toaster } from "react-hot-toast";
 import { createContext } from "react";
 import Activity from "./pages/profile/activity/Activity.jsx";
+import Conversation from "./pages/profile/activity/conversation/Conversation.jsx";
 
 export const SearchContext = createContext(null);
 export default function Router() {
@@ -59,6 +60,14 @@ export default function Router() {
           element={
             <RequiredAuth>
               <Activity />
+            </RequiredAuth>
+          }
+        />
+        <Route
+          path="/chat"
+          element={
+            <RequiredAuth>
+              <Conversation />
             </RequiredAuth>
           }
         />

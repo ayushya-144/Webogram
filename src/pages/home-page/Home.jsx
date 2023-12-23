@@ -26,7 +26,7 @@ export default function Home() {
       {isLoading ? (
         <Loader />
       ) : error ? (
-        <ErrorPage>{error.data.message}</ErrorPage>
+        <ErrorPage>{error.data?.message}</ErrorPage>
       ) : data?.data?.length > 0 ? (
         data?.data?.map((post) => {
           // const tempImageId = Math.ceil(Math.random() * 10);

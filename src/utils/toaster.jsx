@@ -9,13 +9,10 @@ export const errorToaster = (errorMessage) => {
   console.log(errorMessage);
   toast.error(
     (t) => (
-      <span className="d-flex align-items-center text-wrap justify-content-around">
+      <span className="d-flex align-items-center text-wrap">
         <span className="mx-1">{errorMessage}</span>
-        <button
-          className="btn btn-secondary text-right mx-0 p-0"
-          onClick={() => toast.dismiss(t.id)}
-        >
-          <i className="fa fa-times w-100 h-100 text-sm text-white fs-6"></i>
+        <button className="btn mx-0 p-0" onClick={() => toast.dismiss(t.id)}>
+          <i className="fa fa-times text-white fs-6"></i>
         </button>
       </span>
     ),
@@ -25,16 +22,13 @@ export const errorToaster = (errorMessage) => {
   );
 };
 
-export const successToaster = (errorMessage) => {
+export const successToaster = (successMessage) => {
   toast.success(
     (t) => (
-      <span className="d-flex align-items-center text-wrap justify-content-evenly">
-        <span className="mx-1">{errorMessage}</span>
-        <button
-          className="btn btn-secondary text-right mx-0 p-0"
-          onClick={() => toast.dismiss(t.id)}
-        >
-          <i className="fa fa-times w-100 h-100 text-sm text-white fs-6"></i>
+      <span className="d-flex align-items-center text-wrap">
+        <span className="mx-1">{successMessage}</span>
+        <button className="btn mx-0 p-0" onClick={() => toast.dismiss(t.id)}>
+          <i className="fa fa-times text-white fs-6"></i>
         </button>
       </span>
     ),

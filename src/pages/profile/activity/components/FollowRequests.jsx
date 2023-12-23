@@ -18,9 +18,6 @@ function FollowRequests() {
 
   const [acceptFollowRequest] = useAcceptFollowRequestMutation();
 
-  // console.log(usersData);
-  // console.log(followRequestsData);
-
   let filteredData = [];
   if (followRequestsData && usersData) {
     for (let i = 0; i < usersData.data.length; i++) {
@@ -36,8 +33,6 @@ function FollowRequests() {
     const response = await acceptFollowRequest({ id });
     console.log(response);
   }
-
-  // console.log(filteredData);
 
   return (
     <div className="mb-3">

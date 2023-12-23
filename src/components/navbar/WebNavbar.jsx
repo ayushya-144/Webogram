@@ -20,7 +20,7 @@ export default function WebNavbar() {
   const [showSearch, setShowSearch] = useState(false);
 
   useEffect(() => {
-    if (location.pathname === "/profile") {
+    if (location.pathname === "/profile" || location.pathname === "/activity") {
       setShowSearch(false);
     } else {
       setShowSearch(true);
@@ -182,6 +182,10 @@ export default function WebNavbar() {
                 className="fa fa-heart-o text-decoration-none text-center mx-2 d-flex mt-2 h-50"
                 to="/activity"
               ></NavLink>
+              <NavLink
+                className="fa fa-envelope-o text-decoration-none text-center mx-2 d-flex mt-2 h-50"
+                to="/chat"
+              ></NavLink>
               <Nav.Link className="text-decoration-none text-center">
                 <i onClick={handleShowCreatePopUp} className="fa fa-plus"></i>
               </Nav.Link>
@@ -189,7 +193,7 @@ export default function WebNavbar() {
                 <i onClick={handleShow} className="fa fa-power-off"></i>
               </Nav.Link>
               <NavLink
-                className="fa fa-user text-decoration-none text-center mx-2 d-flex mt-2 h-50"
+                className="fa fa-user-o text-decoration-none text-center mx-2 d-flex mt-2 h-50"
                 to="/profile"
               ></NavLink>
             </Nav>
