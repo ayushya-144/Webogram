@@ -1,16 +1,22 @@
 import { useSearchParams } from "react-router-dom";
 import "./chat-window.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useGetConversationQuery } from "../../../../../features/chats/chats";
 import Card from "react-bootstrap/Card";
-function ChatWindow({ socket, receiverId }) {
+import socket from "../../../../../services/sockets";
+
+function ChatWindow({ receiverId }) {
   const [message, setMessage] = useState("");
+
+  // Setting search params to start chat
   const [
     conversationId,
     // setConversationId
   ] = useSearchParams({
     conversationId: "",
   });
+
+  // Getting Individual Conversation List
   const conId = conversationId.get("conversationId");
   const {
     data: chatList,
@@ -19,11 +25,8 @@ function ChatWindow({ socket, receiverId }) {
   } = useGetConversationQuery(conId, {
     skip: conId === "" || conId === undefined,
   });
-  socket.on("getMessage", (response) => {
-    console.log(response);
-    handleReceivingMessage(response);
-  });
-  console.log(chatList);
+
+  // Sending Message
   const handleFormSubmission = () => {
     socket.emit("sendMessage", {
       receiverId: receiverId,
@@ -31,23 +34,29 @@ function ChatWindow({ socket, receiverId }) {
     });
     setMessage("");
   };
-  const handleReceivingMessage = (response) => {
-    console.log("response", response);
-  };
 
-  const chatListData = chatList?.data?.data.map((chat) => {
-    return (
-      <div key={chat._id} className="mt-1 mb-1 d-flex flex-column">
-        <Card
-          className={`shadow border p-1 d-flex align-items-${
+  // mapping chatList data
+  const chatListData = chatList?.data?.data
+    .slice(0)
+    .reverse()
+    .map((chat) => {
+      return (
+        <div
+          key={chat._id}
+          className={`mt-1 mb-1 d-flex flex-column align-items-${
             receiverId !== chat.senderId && "end"
           }`}
         >
-          <Card.Text>{chat.content}</Card.Text>
-        </Card>
-      </div>
-    );
-  });
+          <Card
+            className={`shadow message-popup border px-3 p-1 d-flex bg-primary text-white align-items-${
+              receiverId !== chat.senderId && "end bg-success"
+            }`}
+          >
+            <Card.Text>{chat.content}</Card.Text>
+          </Card>
+        </div>
+      );
+    });
 
   return (
     <div className="container container-chat-window border mt-2 d-flex flex-column justify-content-between rounded">
@@ -55,9 +64,8 @@ function ChatWindow({ socket, receiverId }) {
       <div
         style={{
           backgroundColor: "whitesmoke",
-          overflowX: "auto",
         }}
-        className="container d-flex flex-column justify-content-end flex-grow-1 w-100 border shadow"
+        className="container container-chat-box overflow-auto w-100 border shadow p-3"
       >
         {chatListData}
       </div>

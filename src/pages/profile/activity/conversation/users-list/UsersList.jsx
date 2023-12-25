@@ -1,11 +1,11 @@
 import { useSearchParams } from "react-router-dom";
 import { useGetAllUsersQuery } from "../../../../../features/profile/profile";
-import { useGetConversationQuery } from "../../../../../features/chats/chats";
 
 function UsersList({ conListData, receiverId, setReceiverId }) {
+  // getting all users list
   const { data } = useGetAllUsersQuery();
-  // console.log("conListData", conListData);
-  // console.log(data?.data);
+
+  //mapping all users list
   const usersList = data?.data?.map((user) => {
     return (
       <option key={user._id} value={user._id}>
@@ -13,23 +13,50 @@ function UsersList({ conListData, receiverId, setReceiverId }) {
       </option>
     );
   });
+
+  // setting search param for conversationList
+  const [conversationId, setConversationId] = useSearchParams({
+    conversationId: "",
+  });
+
+  // mapping all conversation List data
   const conList = conListData?.data?.map((con) => {
+    if (con.conversationId === conversationId.get("conversationId")) {
+      setReceiverId(con.chatUser._id);
+    }
     return (
-      <option key={con.conversationId} value={JSON.stringify(con)}>
+      <option key={con.conversationId} value={con.conversationId}>
         {con.chatUser.firstname} {con.chatUser.lastname}
       </option>
     );
   });
-  const [conversationId, setConversationId] = useSearchParams({
-    conversationId: "",
-  });
+
+  // // on select user
+  // const handleDropDownChange = (e) => {
+  //   const receiver = JSON.parse(e.target.value);
+  //   setReceiverId(receiver.chatUser._id);
+  //   setConversationId((prev) => {
+  //     if (receiver.chatUser._id !== "") {
+  //       console.log(receiver.conversationId);
+  //       prev.set("conversationId", receiver.conversationId);
+  //       return prev;
+  //     } else {
+  //       prev.delete("conversationId");
+  //       return prev;
+  //     }
+  //   });
+  // };
   const handleDropDownChange = (e) => {
-    const receiver = JSON.parse(e.target.value);
-    setReceiverId(receiver.chatUser._id);
+    const receiver = e.target.value;
+    conListData?.data?.map((con) => {
+      if (con.conversationId === receiver) {
+        setReceiverId(con.chatUser._id);
+      }
+    });
     setConversationId((prev) => {
-      if (receiver.chatUser._id !== "") {
-        console.log(receiver.conversationId);
-        prev.set("conversationId", receiver.conversationId);
+      console.log(receiver);
+      if (receiver !== "") {
+        prev.set("conversationId", receiver);
         return prev;
       } else {
         prev.delete("conversationId");
@@ -39,7 +66,7 @@ function UsersList({ conListData, receiverId, setReceiverId }) {
   };
 
   return (
-    <>
+    <div className="container d-flex">
       <select
         className="container form-select text-center mt-2"
         onChange={(e) => {
@@ -47,20 +74,24 @@ function UsersList({ conListData, receiverId, setReceiverId }) {
         }}
         value={receiverId}
       >
-        <option value="">Select User to Chat</option>
+        <option value="">Add Users to chat with</option>
         {usersList}
       </select>
       <select
-        className="container form-select text-center mt-2"
+        className="container form-select text-center mt-2 mx-2"
         onChange={(e) => {
           handleDropDownChange(e);
         }}
-        value={conversationId}
+        value={
+          conversationId.get("conversationId")
+            ? conversationId.get("conversationId")
+            : ""
+        }
       >
-        <option value="">Select User to Chat</option>
+        <option value="">Conversation List</option>
         {conList}
       </select>
-    </>
+    </div>
   );
 }
 

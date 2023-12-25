@@ -1,18 +1,10 @@
-import { io } from "socket.io-client";
-import { getUserToken } from "../../../../utils/getSessionData";
 import { successToaster } from "../../../../utils/toaster";
 import { useState } from "react";
 import ChatWindow from "./chat-window/ChatWindow";
 import UsersList from "./users-list/UsersList";
-import {
-  useGetConversationListQuery,
-  // useGetConversationQuery,
-} from "../../../../features/chats/chats";
-const socket = io("http://localhost:4004", {
-  extraHeaders: {
-    token: getUserToken(),
-  },
-});
+import { useGetConversationListQuery } from "../../../../features/chats/chats";
+import socket from "../../../../services/sockets";
+
 socket.on("connect", () => {
   successToaster("connected");
   console.log({ socket });
@@ -34,11 +26,7 @@ function Conversation() {
         receiverId={receiverId}
         setReceiverId={setReceiverId}
       />
-      <ChatWindow
-        conListData={conListData}
-        receiverId={receiverId}
-        socket={socket}
-      />
+      <ChatWindow conListData={conListData} receiverId={receiverId} />
     </div>
   );
 }
